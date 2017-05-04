@@ -1,0 +1,8 @@
+﻿{
+	"name": "fw-javascripts",
+	"version": "0.0.1",
+	"author": "delong",
+	"dependencies": {
+		"fw-components": "*"
+	}
+}

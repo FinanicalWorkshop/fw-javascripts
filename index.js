@@ -4,7 +4,7 @@ import DOMReady from './core/dom-ready.js'
 import Event from './core/event.js'
 import Utils from './core/utils.js'
 import getJSONP from './core/jsonp.js'
-import * as Components from './components'
+import * as Components from 'fw-components'
 import * as Capture from './core/capture.js'
 
 
