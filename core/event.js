@@ -83,4 +83,4 @@ class Event {
     }
 }
 
-export default new Event()
+module.exports = new Event()

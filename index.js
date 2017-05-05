@@ -1,14 +1,9 @@
-import AppBridge from './core/app-bridge.js'
-import Browser from './core/browser.js'
-import DOMReady from './core/dom-ready.js'
-import Event from './core/event.js'
-import Utils from './core/utils.js'
-import getJSONP from './core/jsonp.js'
-import * as Components from 'fw-components'
-import * as Capture from './core/capture.js'
 
+let Components = require('fw-components')
+let Capture = require('./core/capture')
 
-import RequestFactory from './core/request-factory.js';
+const BrowserFactory = require('./core/browser')
+const RequestFactory = require('./core/request-factory')
 
 let Request = new RequestFactory({
     error_handler: (code, message, responseText) => {
@@ -21,16 +16,11 @@ let Request = new RequestFactory({
     hide_loading: Components.hideLoading
 }).ajax
 
-let Version = { version: '0.9.0' }
-
-export {
-    Version as default
-    , AppBridge
-    , Browser
-    , DOMReady
-    , Event
-    , Utils
-    , getJSONP
-    , Request
-    , Components
-}
+module.exports = { version: '0.9.0' };
+exports['AppBridge'] = require('./core/app-bridge')
+exports['Browser'] = new BrowserFactory()
+exports['DOMReady'] = require('./core/dom-ready')
+exports['Event'] = require('./core/event')
+exports['Utils'] = require('./core/utils')
+exports['getJSONP'] = require('./core/jsonp')
+exports['Request'] = Request
