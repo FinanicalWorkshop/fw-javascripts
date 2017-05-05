@@ -1,8 +1,25 @@
 ﻿{
 	"name": "fw-javascripts",
-	"version": "0.0.2",
+	"description": "used for Company project, private purpose",
+	"version": "0.0.3",
 	"author": "delong",
+	"repository": {
+		"type": "git",
+		"url": "https://github.com/FinanicalWorkshop/fw-javascripts"
+	},
 	"dependencies": {
 		"fw-components": "*"
+	},
+	"devDependencies": {
+		"mocha": "^3.3"
+	},
+	"keywords": [
+		"金融工场",
+		"financial",
+		"workshop"
+	],
+	"license": "BSD",
+	"scripts": {
+		"test": "node node_modules/mocha/bin/mocha --reporter=nyan"
 	}
 }
