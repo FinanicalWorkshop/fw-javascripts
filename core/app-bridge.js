@@ -9,4 +9,4 @@ class AppBridge {
     }
 }
 
-module.exports = new AppBridge()
+export default new AppBridge()

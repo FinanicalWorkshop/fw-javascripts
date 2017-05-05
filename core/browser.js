@@ -1,13 +1,12 @@
-class BrowserFactory {
-    constructor(ua, app_ua_reg) {
-        this.ua = ua || navigator.userAgent
-        this.app_ua_reg = app_ua_reg || /FinancialWorkshop\/(\d+.\d+.\d+)/
+class Browser {
+    constructor() {
+        this.ua = navigator.userAgent
     }
     get inApp() {
-        return this.app_ua_reg.test(this.ua)
+        return /FinancialWorkshop/.test(this.ua)
     }
     get appVersion() {
-        let r = this.ua.match(this.app_ua_reg);
+        let r = this.ua.match(/FinancialWorkshop\/(\d+.\d+.\d+)/);
         return r ? r[1] : '0';
     }
     get inAndroid() {
@@ -30,4 +29,4 @@ class BrowserFactory {
     }
 }
 
-module.exports = BrowserFactory
+export default new Browser

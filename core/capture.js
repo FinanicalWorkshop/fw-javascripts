@@ -1,4 +1,4 @@
-exports['captureError'] = captureError = e => {
+let captureError = e => {
     typeof (Raven) === 'object' && Raven.isSetup() && Raven.captureException(e);
 
     // 如果是 _vds 相关错误, 不捕捉, 这是growing io的错误
@@ -7,10 +7,15 @@ exports['captureError'] = captureError = e => {
     window.console && console.error && console.error(e);
 }
 
-exports['runInCatch'] = runInCatch = fn => {
+let runInCatch = fn => {
     try {
         fn()
     } catch (e) {
         captureError(e)
     }
+}
+
+export {
+    runInCatch
+    , captureError
 }

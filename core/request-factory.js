@@ -148,4 +148,7 @@ class RequestFactory {
     }
 }
 
-module.exports = RequestFactory
+
+export {
+    RequestFactory as default
+}

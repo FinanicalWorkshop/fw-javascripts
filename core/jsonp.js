@@ -58,4 +58,4 @@ const getJSONP = function (url, params) {
     });
 }
 
-module.exports = getJSONP
+export default getJSONP

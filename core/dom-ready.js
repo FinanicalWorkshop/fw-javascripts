@@ -1,6 +1,4 @@
-const capture = require('./capture.js');
-
-let runInCatch = capture.runInCatch;
+import { runInCatch } from './capture.js';
 
 let readyList = [];
 
@@ -39,4 +37,4 @@ if (document.readyState === "complete") {
 }
 
 
-module.exports = DOMReady
+export default DOMReady
