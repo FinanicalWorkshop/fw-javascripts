@@ -1,5 +1,5 @@
-const utils = require('../core/utils.js')
-const assert = require('assert')
+import Utils from '../core/utils.js'
+import assert from 'assert'
 
 
 describe('Utils', function () {
@@ -10,12 +10,13 @@ describe('Utils', function () {
             }
         })
         it('should parse parameters from url(location.search)', function () {
-            let q = utils.urlQuery
+            let q = Utils.urlQuery
+
             assert.strictEqual('a', q.p1)
             assert.strictEqual('b', q.p2)
         })
         it('should setup default value to boolean type: true', function () {
-            let q = utils.urlQuery
+            let q = Utils.urlQuery
             assert.strictEqual(true, q.p3)
             assert.strictEqual('true', q.p4)
         })
@@ -25,9 +26,10 @@ describe('Utils', function () {
         describe('price', function () {
             it('should be format price', function () {
 
-                let p = utils.format.price
+                let p = Utils.format.price
+                assert.strictEqual('0.1012', p(.10123, 4))
                 assert.strictEqual('0.10', p(.1, 2))
-                assert.strictEqual('0.12', p(.1201, 2))
+                assert.strictEqual('0.12', p(.1201))
                 assert.strictEqual('0.12', p(.1299, 2))
                 assert.strictEqual('0', p(0))
                 assert.strictEqual('1', p(1))

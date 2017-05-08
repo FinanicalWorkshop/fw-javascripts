@@ -1,6 +1,6 @@
 
-const assert = require('assert')
-const BrowserFactory = require('../core/browser-factory.js')
+import assert from 'assert'
+import BrowserFactory from '../core/browser-factory.js'
 
 const JRGC_IPHONE_UA = "iPhone; FinancialWorkshop/2.9.10"
 const JRGC_ANDROID_UA = "Android; FinancialWorkshop/2.9.10"

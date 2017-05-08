@@ -1,6 +1,6 @@
-class Browser {
-    constructor() {
-        this.ua = navigator.userAgent
+class BrowserFactory {
+    constructor(ua) {
+        this.ua = ua || navigator.userAgent
     }
     get inApp() {
         return /FinancialWorkshop/.test(this.ua)
@@ -29,4 +29,4 @@ class Browser {
     }
 }
 
-export default new Browser
+export default BrowserFactory

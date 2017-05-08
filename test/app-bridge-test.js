@@ -1,5 +1,6 @@
-const utils = require('../core/app-bridge.js')
-const assert = require('assert')
+
+import assert from 'assert';
+import AppBridge from '../core/app-bridge.js';
 
 describe('AppBridge', function () {
     describe('', function () {

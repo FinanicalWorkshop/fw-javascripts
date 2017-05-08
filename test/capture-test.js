@@ -1,5 +1,5 @@
-const capture = require('../core/capture.js')
-const assert = require('assert')
+import { runInCatch, captureError } from '../core/capture.js'
+import assert from 'assert'
 
 
 describe('Capture', function () {
@@ -7,10 +7,10 @@ describe('Capture', function () {
         before(function () {
         })
         it('should have a function called runInCatch', function () {
-            assert(typeof(capture.runInCatch), 'function')
+            assert(typeof (runInCatch), 'function')
         })
         it('should have a function called captureError', function () {
-            assert(typeof(capture.captureError), 'function')
+            assert(typeof (captureError), 'function')
         })
     })
 })

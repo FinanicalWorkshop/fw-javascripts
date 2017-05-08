@@ -27,6 +27,15 @@ let DOMReady = cb => {
         readyList.push(cb);
 }
 
+if (typeof (document) === 'undefined') {
+    let noop = {
+        addEventListener: () => null,
+        removeEventListener: () => null,
+    }
+    global.document = noop
+    global.window = noop
+}
+
 if (document.readyState === "complete") {
     setTimeout(popDOMReadyArr);
 } else {

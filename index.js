@@ -1,5 +1,4 @@
 import AppBridge from './core/app-bridge.js'
-import Browser from './core/browser.js'
 import DOMReady from './core/dom-ready.js'
 import Event from './core/event.js'
 import Utils from './core/utils.js'
@@ -8,7 +7,10 @@ import * as Components from 'fw-components'
 import * as Capture from './core/capture.js'
 
 
-import RequestFactory from './core/request-factory.js';
+import BrowserFactory from './core/browser-factory.js'
+import RequestFactory from './core/request-factory.js'
+
+let Browser = new BrowserFactory()
 
 let Request = new RequestFactory({
     error_handler: (code, message, responseText) => {
