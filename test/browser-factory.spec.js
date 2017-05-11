@@ -9,6 +9,8 @@ const NEXUS5X_UA = "Mozilla/5.0 (Linux; Android 6.0; Nexus 5 Build/MRA58N) Apple
 const IPHONE6_UA = "Mozilla/5.0 (iPhone; CPU iPhone OS 9_1 like Mac OS X) AppleWebKit/601.1.46 (KHTML, like Gecko) Version/9.0 Mobile/13B143 Safari/601.1"
 const WEBCHROME_UA = "Mozilla/5.0 (Windows NT 10.0; WOW64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/57.0.2987.110 Safari/537.36"
 
+const JRGC_APP_STAMP = /FinancialWorkshop/
+
 describe('BrowserFactory', function () {
     describe('create instance by default parameters', function () {
 
@@ -16,7 +18,7 @@ describe('BrowserFactory', function () {
             global.navigator = {
                 userAgent: WEBCHROME_UA
             }
-            this.browser = new BrowserFactory()
+            this.browser = new BrowserFactory(null, JRGC_APP_STAMP)
         })
 
         it('web chrome ua', function () {
@@ -34,7 +36,7 @@ describe('BrowserFactory', function () {
     describe('create instance by specify parameters', function () {
 
         it('nexus 5x ua', function () {
-            let browser = new BrowserFactory(NEXUS5X_UA)
+            let browser = new BrowserFactory(NEXUS5X_UA, JRGC_APP_STAMP)
 
             assert.equal(false, browser.inApp)
             assert.equal(true, browser.inAndroid)
@@ -45,7 +47,7 @@ describe('BrowserFactory', function () {
             assert.equal(false, browser.inWeixin)
         })
         it('iPhone6 ua', function () {
-            let browser = new BrowserFactory(IPHONE6_UA)
+            let browser = new BrowserFactory(IPHONE6_UA, JRGC_APP_STAMP)
 
             assert.equal(false, browser.inApp)
             assert.equal(false, browser.inAndroid)
@@ -56,7 +58,7 @@ describe('BrowserFactory', function () {
             assert.equal(false, browser.inWeixin)
         })
         it('jrgc ios app ua', function () {
-            let browser = new BrowserFactory(JRGC_IPHONE_UA)
+            let browser = new BrowserFactory(JRGC_IPHONE_UA, JRGC_APP_STAMP)
 
             assert.equal(true, browser.inApp)
             assert.equal(false, browser.inAndroid)
@@ -67,7 +69,7 @@ describe('BrowserFactory', function () {
             assert.equal(false, browser.inWeixin)
         })
         it('jrgc android app ua', function () {
-            let browser = new BrowserFactory(JRGC_ANDROID_UA)
+            let browser = new BrowserFactory(JRGC_ANDROID_UA, JRGC_APP_STAMP)
 
             assert.equal(true, browser.inApp)
             assert.equal(true, browser.inAndroid)
@@ -77,9 +79,9 @@ describe('BrowserFactory', function () {
             assert.equal(true, browser.inAndroidApp)
             assert.equal(false, browser.inWeixin)
         })
-        
+
         it('jrgc android app ua', function () {
-            let browser = new BrowserFactory(WEIXIN_ANDROID_UA)
+            let browser = new BrowserFactory(WEIXIN_ANDROID_UA, JRGC_APP_STAMP)
 
             assert.equal(false, browser.inApp)
             assert.equal(true, browser.inAndroid)

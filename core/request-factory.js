@@ -87,15 +87,15 @@ class RequestFactory {
             withCredentials: false
         }
 
-        let nil = n => null;
+        let noop = n => null;
 
         this.handler = Object.assign({
-            error_handler: nil,
-            timeout_handler: nil,
-            alert: nil,
-            capture: nil,
-            show_loading: nil,
-            hide_loading: nil
+            error_handler: noop,
+            timeout_handler: noop,
+            alert: noop,
+            capture: noop,
+            show_loading: noop,
+            hide_loading: noop
         }, handler)
     }
 

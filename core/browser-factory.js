@@ -1,13 +1,14 @@
 class BrowserFactory {
-    constructor(ua) {
+    constructor(ua, app_stamp) {
         this.ua = ua || navigator.userAgent
+        this.app_stamp = app_stamp
     }
     get inApp() {
-        return /FinancialWorkshop/.test(this.ua)
+        return !!this.ua.match(this.app_stamp)
     }
     get appVersion() {
-        let r = this.ua.match(/FinancialWorkshop\/(\d+.\d+.\d+)/);
-        return r ? r[1] : '0';
+        let r = this.ua.match(RegExp(this.app_stamp + '/(\\d+.\\d+.\\d+)'))
+        return r ? r[1] : '0'
     }
     get inAndroid() {
         return /Android/i.test(this.ua)
