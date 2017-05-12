@@ -1,7 +1,7 @@
 class BrowserFactory {
     constructor(ua, app_stamp) {
         this.ua = ua || navigator.userAgent
-        this.app_stamp = app_stamp
+        this.app_stamp = app_stamp || 'not in any apps'
     }
     get inApp() {
         return !!this.ua.match(this.app_stamp)

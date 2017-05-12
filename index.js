@@ -1,4 +1,4 @@
-import AppBridge from './core/app-bridge.js'
+import NativeBridgeFactory from './core/native-bridge-factory.js'
 import DOMReady from './core/dom-ready.js'
 import Event from './core/event.js'
 import Utils from './core/utils.js'
@@ -32,11 +32,11 @@ let Request = new RequestFactory({
     hide_loading: Components.hideLoading
 }).ajax
 
-let Version = { version: '0.9.0' }
+let Version = { version: '0.1.0' }
 
 export {
     Version as default
-    , AppBridge
+    , NativeBridgeFactory
     , BrowserFactory
     , DOMReady
     , Event
