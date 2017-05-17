@@ -83,7 +83,7 @@ for test this lib, run
 
 * 完整参数列表及默认值
 
-```json
+```javascript
     {
         url: '',
         method: 'GET',
