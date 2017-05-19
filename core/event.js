@@ -22,7 +22,8 @@ class Event {
         window.addEventListener("scroll", fn, false);
     }
     cancelTouchBottom() {
-        window.removeEventListener('scroll', this.event_map['touch_bottom_fn'])
+        window.removeEventListener('scroll', this.event_map['touch_bottom_fn']);
+        this.event_map['touch_bottom_fn'] = null;
     }
 }
 
