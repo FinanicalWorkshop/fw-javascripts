@@ -1,6 +1,6 @@
 
 class Event {
-    consturctor() {
+    constructor() {
         this.event_map = {}
     }
 
@@ -8,12 +8,12 @@ class Event {
         if (this.event_map['touch_bottom_fn'])
             throw ('duplicated event listener on slide up');
 
-        var fn = function () {
+        var fn = () => {
             //判断滚动条滚到了网页最底部
             if (window.innerHeight + document.body.scrollTop + document.documentElement.scrollTop + 50 > document.body.scrollHeight) {
                 if (this.event_map['touch_bottom'] == 'running') return;
                 this.event_map['touch_bottom'] = 'running';
-                cb(function () {
+                cb(() => {
                     this.event_map['touch_bottom'] = 'ready';
                 })
             }
@@ -22,7 +22,8 @@ class Event {
         window.addEventListener("scroll", fn, false);
     }
     cancelTouchBottom() {
-        window.removeEventListener('scroll', this.event_map['touch_bottom_fn'])
+        window.removeEventListener('scroll', this.event_map['touch_bottom_fn']);
+        this.event_map['touch_bottom_fn'] = null;
     }
 }
 

@@ -34,7 +34,7 @@ class Ajax {
             for (let k in opt.data) {
                 let v = opt.data[k]
                 if (v !== undefined && v !== null)
-                    form_data += `${form_data.length ? '' : '&'}${k}=${v}`
+                    form_data += `${form_data.length ? '&' : ''}${k}=${v}`
             }
         } else {
             form_data = opt.data;

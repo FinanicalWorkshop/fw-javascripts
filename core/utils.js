@@ -37,6 +37,16 @@ class Utils {
         });
         return r;
     }
+
+    static get docCookie() {
+        let c = document.cookie, r = {};
+        if (c === '') return r
+        c.split(';').forEach((kv) => {
+            let t = kv.trim().split('=');
+            r[t[0]] = t[1];
+        });
+        return r;
+    }
 }
 
 export default Utils
