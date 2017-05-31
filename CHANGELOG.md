@@ -1,6 +1,14 @@
 
 # CHANGELOG
 
+### 0.1.2
+
+* add spec for DOMReady
+
+### 0.1.1
+
+* fix issue
+
 ### 0.1.0
 
 * refactory NativeBridgeFactory & BrowserFactory

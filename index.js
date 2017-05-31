@@ -1,5 +1,5 @@
 import NativeBridgeFactory from './core/native-bridge-factory.js'
-import DOMReady from './core/dom-ready.js'
+import DOMReadyMethodFactory from './core/dom-ready-factory.js'
 import Event from './core/event.js'
 import Utils from './core/utils.js'
 import getJSONP from './core/jsonp.js'
@@ -33,6 +33,7 @@ let Request = new RequestFactory({
 }).ajax
 
 let Version = { version: '0.1.0' }
+let DOMReady = DOMReadyMethodFactory(window, document)
 
 export {
     Version as default

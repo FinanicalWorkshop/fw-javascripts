@@ -115,5 +115,4 @@ class NativeBridgeFactory {
     }
 }
 
-
 export default NativeBridgeFactory
