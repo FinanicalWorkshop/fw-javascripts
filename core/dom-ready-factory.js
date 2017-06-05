@@ -6,7 +6,7 @@ function DOMReadyMethodFactory(window, document) {
     let isReady = false
 
     let go = () => {
-        this.readyList.forEach(cb => {
+        readyList.forEach(cb => {
             runInCatch(() => {
                 if (typeof (cb) === 'undefined')
                     throw new Error(`${cb} is undefined`);
@@ -18,13 +18,13 @@ function DOMReadyMethodFactory(window, document) {
     }
 
     let ready = () => {
-        this.isReady = true
+        isReady = true
         document.removeEventListener("DOMContentLoaded", ready, false)
         window.removeEventListener("load", ready, false)
         go()
     }
 
-    let DOMReady = cb => this.isReady ? runInCatch(cb) : readyList.push(cb);
+    let DOMReady = cb => isReady ? runInCatch(cb) : readyList.push(cb);
 
     DOMReady.getStatus = () => ({
         isReady: isReady,
@@ -32,7 +32,7 @@ function DOMReadyMethodFactory(window, document) {
     })
 
     if (document.readyState === "complete") {
-        this.isReady = true
+        isReady = true
     } else {
         // Use the handy event callback
         document.addEventListener("DOMContentLoaded", ready, false);
