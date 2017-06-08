@@ -38,9 +38,11 @@ function initIOS(init_callback) {
 
 class NativeBridgeFactory {
 
-    constructor(activeUserAgent, responseCallback) {
+    constructor(activeUserAgent, onNativeMessageReceive) {
         this.bridge = null;
         this.isReady = false;
+        // 接收来自App消息的回调函数, 同时只能设置一个回调方法
+        this._receive_callback = null
         this._depot = [];
 
         // 先判断 UA 是否符合条件, 不符合条件就不初始化 NativeBridge
@@ -52,15 +54,15 @@ class NativeBridgeFactory {
             if (inAndroid()) {
                 // Android need this init function, or could not send message to webview
                 // BUT!!!, iOS could not use this, or could not send message to webview
-                bridge.init(function (message, responseCallback) {
+                bridge.init((message, responseCallback) => {
                     responseCallback && responseCallback({ 'msg': 'init success' })
                 })
             }
 
-            bridge.registerHandler('jsHandler', function (data, responseCallback) {
-                let resp = onNativeMessageReceive && onNativeMessageReceive(data)
+            bridge.registerHandler('jsHandler', (data, responseCallback) => {
+                let resp = this._receive_callback && this._receive_callback(data)
                 if (resp) responseCallback(resp);
-            });
+            })
 
             this.setup(bridge)
         })
@@ -96,6 +98,10 @@ class NativeBridgeFactory {
             this._depot.push(pack)
     }
 
+    onReceive(fn) {
+        this._receive_callback = fn
+    }
+
     action(name, value) {
         // 发送消息
         this.send(this._pack_up(name, value))
@@ -109,7 +115,7 @@ class NativeBridgeFactory {
     get help() {
         console && console.log && console.log(`
             Only has 2 methods:
-            1. trigger
+            1. action
             2. toNative
         `)
     }
