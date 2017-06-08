@@ -38,7 +38,7 @@ function initIOS(init_callback) {
 
 class NativeBridgeFactory {
 
-    constructor(activeUserAgent, onNativeMessageReceive) {
+    constructor(activeUserAgent) {
         this.bridge = null;
         this.isReady = false;
         // 接收来自App消息的回调函数, 同时只能设置一个回调方法
@@ -102,7 +102,7 @@ class NativeBridgeFactory {
         this._receive_callback = fn
     }
 
-    action(name, value) {
+    trigger(name, value) {
         // 发送消息
         this.send(this._pack_up(name, value))
     }
@@ -115,7 +115,7 @@ class NativeBridgeFactory {
     get help() {
         console && console.log && console.log(`
             Only has 2 methods:
-            1. action
+            1. trigger
             2. toNative
         `)
     }

@@ -191,7 +191,11 @@ Utils.format 是多个格式化方法集合
         // use this method receive data from App
     }
 
-    const NativeBridge = new NativeBridgeFactory('Easyloan888', receive_handler)
+    const NativeBridge = new NativeBridgeFactory('Easyloan888')
+    // 设置接受来自App的方法
+    NativeBridge.onReceive(data => (){
+        console.log(data)
+    })
 
     NativeBridge.trigger('close') // 关闭当前webview
     NativeBridge.toNative('coupon') // 到app原生的优惠券页面
