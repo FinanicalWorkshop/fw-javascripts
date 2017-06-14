@@ -35,7 +35,19 @@ class Utils {
             let t = kv.split('=');
             if (t[0]) r[t[0]] = t[1] ? decodeURIComponent(t[1]) : true;
         });
-        return r;
+        return r
+    }
+
+    static get hashQuery() {
+        let h = window.location.hash;
+        if (h.indexOf('?') > -1) h = h.substr(h.indexOf('?') + 1);
+
+        let r = {};
+        h.split('&').forEach(function (kv) {
+            let t = kv.split('=');
+            if (t[0]) r[t[0]] = t[1] ? decodeURIComponent(t[1]) : true;
+        });
+        return r
     }
 
     static get docCookie() {
