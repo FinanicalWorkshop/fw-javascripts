@@ -81,7 +81,7 @@ class NativeBridgeFactory {
         value = encode ? encodeURI(value) : value;
         return {
             action: action,
-            need_login: need_login,
+            need_login: !!need_login,
             value: value,
             encode: encode
         }
@@ -102,9 +102,9 @@ class NativeBridgeFactory {
         this._receive_callback = fn
     }
 
-    trigger(name, value) {
+    trigger(name, value, need_login) {
         // 发送消息
-        this.send(this._pack_up(name, value))
+        this.send(this._pack_up(name, value, need_login))
     }
 
     toNative(kw) {
