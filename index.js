@@ -26,13 +26,13 @@ let Request = new RequestFactory({
     error_handler: (code, message, responseText) => {
         Components.showAlert(`[${code}]${message}`)
     },
-    alert: Components.showAlert,
+    alert: Components.showToast,
     capture: captureError,
     show_loading: Components.showLoading,
     hide_loading: Components.hideLoading
 }).ajax
 
-let Version = { version: '0.1.0' }
+let Version = { version: '0.1.9' }
 let DOMReady = DOMReadyMethodFactory(window, document)
 
 export {
