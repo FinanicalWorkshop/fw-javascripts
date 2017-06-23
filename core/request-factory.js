@@ -82,7 +82,7 @@ class RequestFactory {
             url: '',
             data: {},
             loading: 'mini',
-            slience: false,
+            silence: false,
             timeout: 10, // seconds before timeout, 0 means do nothing
             withCredentials: false
         }
@@ -122,7 +122,7 @@ class RequestFactory {
                 if (r.code == 10000) {
                     resolve(r.data);
                 } else {
-                    if (!options.slience)
+                    if (!options.silence)
                         this.handler.error_handler(r.code, r.message, responseText);
                     reject(r)
                 }
