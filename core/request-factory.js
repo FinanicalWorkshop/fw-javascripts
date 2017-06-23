@@ -107,7 +107,7 @@ class RequestFactory {
 
         options = Object.assign({}, this.default_options, options)
         options['onStart'] = () => {
-            if (options.loading && options.show_loading)
+            if (options.loading)
                 this.handler.show_loading(options['loading'])
         }
         options['onTimeout'] = () => {
@@ -115,6 +115,8 @@ class RequestFactory {
                 this.handler.timeout_handler(options['timeout'])
         }
         options['onComplete'] = (status, responseText, resolve, reject) => {
+            if (options.loading) this.handler.hide_loading()
+
             if (status == 200 || status == 201) {
                 var r = JSON.parse(responseText);
                 if (r.code == 10000) {

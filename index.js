@@ -32,7 +32,7 @@ let Request = new RequestFactory({
     hide_loading: Components.hideLoading
 }).ajax
 
-let Version = { version: '0.1.9' }
+let Version = { version: '0.1.10' }
 let DOMReady = DOMReadyMethodFactory(window, document)
 
 export {
