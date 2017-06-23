@@ -24,9 +24,9 @@ request-factory.js 文件中 Ajax 类的构造方法
 */
 let Request = new RequestFactory({
     error_handler: (code, message, responseText) => {
-        Components.showAlert(`[${code}]${message}`)
+        Components.showToast(`[${code}]: ${message}`)
     },
-    alert: Components.showToast,
+    alert: Components.showAlert,
     capture: captureError,
     show_loading: Components.showLoading,
     hide_loading: Components.hideLoading
