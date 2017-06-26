@@ -44,13 +44,16 @@ class Ajax {
     }
 
     prepare() {
-        let opt = this.options,
+        let opt = this.options, xhrFields = this.options.xhrFields,
             method = opt.method.toUpperCase() == 'GET' ? 'GET' : 'POST';
         this.xhr.open(method, this.request_url, true);
-        this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        this.xhr.setRequestHeader('Accept', 'application/json');
-        for (let k in this.opt.xhrFields) {
-            this.xhr.setRequestHeader(k, opt.xhrFields[k])
+
+        if (!xhrFields['Content-Type'])
+            this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
+        if (!xhrFields['Accept'])
+            this.xhr.setRequestHeader('Accept', 'application/json');
+        for (let k in xhrFields) {
+            this.xhr.setRequestHeader(k, xhrFields[k])
         }
         this.xhr.withCredentials = !!opt.withCredentials;
     }
