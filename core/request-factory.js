@@ -4,6 +4,7 @@ class Ajax {
             url: '',
             method: 'GET',
             data: {},
+            xhrFields: {},
             withCredentials: false,
             timeout: 10,
             onStart: n => null,
@@ -48,6 +49,9 @@ class Ajax {
         this.xhr.open(method, this.request_url, true);
         this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
         this.xhr.setRequestHeader('Accept', 'application/json');
+        for (let k in this.opt.xhrFields) {
+            this.xhr.setRequestHeader(k, opt.xhrFields[k])
+        }
         this.xhr.withCredentials = !!opt.withCredentials;
     }
 
@@ -84,6 +88,7 @@ class RequestFactory {
             loading: 'mini',
             silence: false,
             timeout: 10, // seconds before timeout, 0 means do nothing
+            xhrFields: {},
             withCredentials: false
         }
 
