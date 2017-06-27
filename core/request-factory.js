@@ -4,8 +4,13 @@ class Ajax {
             url: '',
             method: 'GET',
             data: {},
-            xhrFields: {},
-            withCredentials: false,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            headers: {
+                'Accept': 'application/json'
+            },
+            xhrFields: {
+                // example  { withCredentials: true }
+            },
             timeout: 10,
             onStart: n => null,
             onTimeout: n => null,
@@ -13,64 +18,48 @@ class Ajax {
         }
 
         this.options = Object.assign(default_options, options)
+        this.options.method = this.options.method.toUpperCase()
+
         this.xhr = new XMLHttpRequest()
         this.prepare()
     }
     get request_url() {
-        let url = this.options.url;
-        if (this.options.xhrFields['Content-Type'] === 'multipart/form-data') return url
+        let { url, method, data } = this.options
 
-        let form_data = this.form_data;
-        if (this.options.method.toUpperCase() == 'GET' && form_data) {
-            let chr = url.indexOf('?') > 0 ? '&' : '?'
-            url += `${chr}${form_data}`
+        if (method == 'GET') {
+            let flat_data = []
+
+            for (let k in data) {
+                let v = data[k]
+                if (v !== undefined && v !== null) flat_data.push(`${k}=${v}`)
+            }
+            let chr = url.indexOf('?') > 0 ? '&' : '?', str_data = flat_data.join('&')
+            if (str_data) url += `${chr}${str_data}`
         }
+
         return url
     }
     get form_data() {
-        let opt = this.options;
-        let form_data;
-        if (opt.xhrFields['Content-Type'] === 'multipart/form-data') {
-            form_data = new FormData();
-            for (let k in opt.data) {
-                let v = opt.data[k]
-                if (v !== undefined && v !== null)
-                    form_data.append(k, v)
-            }
-        } else {
-            // 伪装成 PUT or DELETE 方法
-            if (opt.method.toUpperCase() === 'PUT')
-                opt.data['_method'] = 'put';
-            if (opt.method.toUpperCase() == 'DELETE')
-                opt.data['_method'] = 'delete';
-            if (typeof (opt.data) == 'object') {
-                for (let k in opt.data) {
-                    let v = opt.data[k]
-                    if (v !== undefined && v !== null)
-                        form_data += `${form_data.length ? '&' : ''}${k}=${v}`
-                }
-            } else {
-                form_data = opt.data;
-            }
+        let { method, data } = this.options
+        let fd = new FormData()
+        if (method === 'GET') return fd
+
+        if (method === 'PUT') fd.append('_method', 'PUT')
+        if (method === 'DELETE') fd.append('_method', 'DELETE')
+        for (let k in data) {
+            let v = data[k]
+            if (v !== undefined && v !== null)
+                form_data.append(k, v)
         }
-        return form_data
+        return fd
     }
 
     prepare() {
-        let opt = this.options, xhrFields = this.options.xhrFields,
-            method = opt.method.toUpperCase() == 'GET' ? 'GET' : 'POST';
+        let { method, contentType, headers, xhrFields } = this.options;
         this.xhr.open(method, this.request_url, true);
-
-        if (!xhrFields['Content-Type'])
-            this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        if (!xhrFields['Accept'])
-            this.xhr.setRequestHeader('Accept', 'application/json');
-        for (let k in xhrFields) {
-            if (k !== 'Content-Type') {
-                this.xhr.setRequestHeader(k, xhrFields[k])
-            }
-        }
-        this.xhr.withCredentials = !!opt.withCredentials;
+        this.xhr.setRequestHeader('Content-Type', contentType);
+        for (let k in headers) this.xhr.setRequestHeader(k, headers[k]);
+        for (let k in xhrFields) this.xhr[k] = xhrFields[k];
     }
 
     counting_down = () => {
@@ -106,8 +95,9 @@ class RequestFactory {
             loading: 'mini',
             silence: false,
             timeout: 10, // seconds before timeout, 0 means do nothing
-            xhrFields: {},
-            withCredentials: false
+            contentType: '',
+            headers: {}, // ajax Headers fields
+            xhrFields: {}
         }
 
         let noop = n => null;
