@@ -17,10 +17,7 @@ class Ajax {
         this.prepare()
     }
     get request_url() {
-        let url = this.options.url;
-        if (this.options.xhrFields['Content-Type'] === 'multipart/form-data') return url
-
-        let form_data = this.form_data;
+        let url = this.options.url, form_data = this.form_data;
         if (this.options.method.toUpperCase() == 'GET' && form_data) {
             let chr = url.indexOf('?') > 0 ? '&' : '?'
             url += `${chr}${form_data}`
@@ -29,7 +26,7 @@ class Ajax {
     }
     get form_data() {
         let opt = this.options;
-        let form_data;
+        let form_data = '';
         if (opt.xhrFields['Content-Type'] === 'multipart/form-data') {
             form_data = new FormData();
             for (let k in opt.data) {
