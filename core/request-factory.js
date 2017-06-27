@@ -17,7 +17,10 @@ class Ajax {
         this.prepare()
     }
     get request_url() {
-        let url = this.options.url, form_data = this.form_data;
+        let url = this.options.url;
+        if (this.options.xhrFields['Content-Type'] === 'multipart/form-data') return url
+
+        let form_data = this.form_data;
         if (this.options.method.toUpperCase() == 'GET' && form_data) {
             let chr = url.indexOf('?') > 0 ? '&' : '?'
             url += `${chr}${form_data}`
@@ -25,20 +28,30 @@ class Ajax {
         return url
     }
     get form_data() {
-        let form_data = '', opt = this.options;
-        // 伪装成 PUT or DELETE 方法
-        if (opt.method.toUpperCase() === 'PUT')
-            opt.data['_method'] = 'put';
-        if (opt.method.toUpperCase() == 'DELETE')
-            opt.data['_method'] = 'delete';
-        if (typeof (opt.data) == 'object') {
+        let opt = this.options;
+        let form_data;
+        if (opt.xhrFields['Content-Type'] === 'multipart/form-data') {
+            form_data = new FormData();
             for (let k in opt.data) {
                 let v = opt.data[k]
                 if (v !== undefined && v !== null)
-                    form_data += `${form_data.length ? '&' : ''}${k}=${v}`
+                    form_data.append(k, v)
             }
         } else {
-            form_data = opt.data;
+            // 伪装成 PUT or DELETE 方法
+            if (opt.method.toUpperCase() === 'PUT')
+                opt.data['_method'] = 'put';
+            if (opt.method.toUpperCase() == 'DELETE')
+                opt.data['_method'] = 'delete';
+            if (typeof (opt.data) == 'object') {
+                for (let k in opt.data) {
+                    let v = opt.data[k]
+                    if (v !== undefined && v !== null)
+                        form_data += `${form_data.length ? '&' : ''}${k}=${v}`
+                }
+            } else {
+                form_data = opt.data;
+            }
         }
         return form_data
     }
@@ -53,7 +66,9 @@ class Ajax {
         if (!xhrFields['Accept'])
             this.xhr.setRequestHeader('Accept', 'application/json');
         for (let k in xhrFields) {
-            this.xhr.setRequestHeader(k, xhrFields[k])
+            if (k !== 'Content-Type') {
+                this.xhr.setRequestHeader(k, xhrFields[k])
+            }
         }
         this.xhr.withCredentials = !!opt.withCredentials;
     }
