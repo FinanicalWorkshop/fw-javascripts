@@ -57,7 +57,7 @@ class Ajax {
     prepare() {
         let { method, contentType, headers, xhrFields } = this.options;
         this.xhr.open(method, this.request_url, true);
-        this.xhr.setRequestHeader('Content-Type', contentType);
+        contentType && this.xhr.setRequestHeader('Content-Type', contentType);
         for (let k in headers) this.xhr.setRequestHeader(k, headers[k]);
         for (let k in xhrFields) this.xhr[k] = xhrFields[k];
     }
