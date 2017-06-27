@@ -49,7 +49,7 @@ class Ajax {
         for (let k in data) {
             let v = data[k]
             if (v !== undefined && v !== null)
-                form_data.append(k, v)
+                fd.append(k, v)
         }
         return fd
     }
