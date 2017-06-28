@@ -31,7 +31,7 @@ class Ajax {
         if (method == 'GET') {
             let chr = url.indexOf('?') > 0 ? '&' : '?',
                 d = this.serialize_options_data;
-            if (d) url += `${chr}${str_data}`
+            if (d) url += chr + d
         }
 
         return url
