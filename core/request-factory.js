@@ -1,4 +1,5 @@
 class Ajax {
+
     constructor(options) {
         let default_options = {
             url: '',
@@ -23,27 +24,40 @@ class Ajax {
         this.xhr = new XMLHttpRequest()
         this.prepare()
     }
+
     get request_url() {
         let { url, method, data } = this.options
 
         if (method == 'GET') {
-            let flat_data = []
-
-            for (let k in data) {
-                let v = data[k]
-                if (v !== undefined && v !== null) flat_data.push(`${k}=${v}`)
-            }
-            let chr = url.indexOf('?') > 0 ? '&' : '?', str_data = flat_data.join('&')
-            if (str_data) url += `${chr}${str_data}`
+            let chr = url.indexOf('?') > 0 ? '&' : '?',
+                d = this.serialize_options_data;
+            if (d) url += `${chr}${str_data}`
         }
 
         return url
     }
-    get form_data() {
-        let { method, data } = this.options
-        let fd = new FormData()
-        if (method === 'GET') return fd
 
+    get serialize_options_data() {
+        let { data } = this.options, flat_data = []
+        for (let k in data) {
+            let v = data[k]
+            if (v !== undefined && v !== null) flat_data.push(`${k}=${v}`)
+        }
+        return flat_data.join('&')
+    }
+
+
+    get form_data() {
+        let { method, data, contentType } = this.options
+
+        // GET 请求就不用发送消息体了
+        if (method === 'GET') return ''
+
+        // 普通的数据提交, 还得拼接字符串, 不然会默认变成 www/form-data
+        if (contentType === 'application/x-www-form-urlencoded; charset=UTF-8')
+            return this.serialize_options_data.replace(/%20/g, "+")
+
+        let fd = new FormData()
         if (method === 'PUT') fd.append('_method', 'PUT')
         if (method === 'DELETE') fd.append('_method', 'DELETE')
         for (let k in data) {
@@ -51,6 +65,7 @@ class Ajax {
             if (v !== undefined && v !== null)
                 fd.append(k, v)
         }
+
         return fd
     }
 
@@ -95,9 +110,6 @@ class RequestFactory {
             loading: 'mini',
             silence: false,
             timeout: 10, // seconds before timeout, 0 means do nothing
-            contentType: '',
-            headers: {}, // ajax Headers fields
-            xhrFields: {}
         }
 
         let noop = n => null;
