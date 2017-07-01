@@ -179,6 +179,24 @@ Utils.format 是多个格式化方法集合
     // => '0.9000'
 ```
 
+*Utils.Cookie*
+
+Utils.Cookie 是操作document的cookie的方法
+
+```javascript
+
+    import { Utils } from 'fw-javascript'
+
+    Utils.Cookie.set('a', '123')
+    console.log(Utils.Cookie.get('a'))
+    // => 123
+
+    Utils.Cookie.delete('a')
+    console.log(Utils.Cookie.get('a'))
+    // => ''
+
+```
+
 #### NativeBridge
 
 当前网页嵌入到App中, 需要与app通信时, 需要调用这个方法

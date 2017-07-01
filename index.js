@@ -2,6 +2,7 @@ import NativeBridgeFactory from './core/native-bridge-factory.js'
 import DOMReadyMethodFactory from './core/dom-ready-factory.js'
 import Event from './core/event.js'
 import Utils from './core/utils.js'
+import Cookie from './core/cookie.js'
 import getJSONP from './core/jsonp.js'
 import * as Components from 'fw-components'
 import { captureError } from './core/capture.js'
@@ -41,6 +42,7 @@ export {
     , BrowserFactory
     , DOMReady
     , Event
+    , Cookie
     , Utils
     , getJSONP
     , RequestFactory
