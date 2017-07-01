@@ -8,7 +8,7 @@ class BrowserFactory {
     }
     
     get inFXHApp(){
-        return !!this.ua.match('Easyloan888')
+        return !!this.ua.match('EasyLoan888')
     }
 
     get inJRGCApp(){
