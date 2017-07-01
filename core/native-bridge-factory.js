@@ -70,6 +70,7 @@ class NativeBridgeFactory {
 
     setup(bridge) {
         this.bridge = bridge
+        this.isReady = true // point to mark native bridge complete init
         for (let i = 0; i < this._depot.length; i++) {
             this._see_off(this._depot[i])
         }

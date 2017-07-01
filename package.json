@@ -1,7 +1,7 @@
 {
   "name": "fw-javascripts",
   "description": "used for Company project, private purpose",
-  "version": "0.3.2",
+  "version": "0.3.3",
   "author": "delong",
   "engines": {
     "node": ">=7"
