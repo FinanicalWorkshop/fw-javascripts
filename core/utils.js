@@ -40,7 +40,7 @@ export default class Utils {
             if (pre) {
                 r += '.' + `${pre}000000`.substr(0, precision || 2)
             } else if (precision) {
-                r += '.000000'.substr(0, precision || 2)
+                r += '.' + '000000'.substr(0, precision || 2)
             }
 
             return r
