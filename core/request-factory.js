@@ -25,6 +25,14 @@ class Ajax {
         this.prepare()
     }
 
+    prepare() {
+        let { method, contentType, headers, xhrFields } = this.options;
+        this.xhr.open(method, this.request_url, true)
+        contentType && this.xhr.setRequestHeader('Content-Type', contentType)
+        for (let k in headers) this.xhr.setRequestHeader(k, headers[k]);
+        for (let k in xhrFields) this.xhr[k] = xhrFields[k];
+    }
+
     get request_url() {
         let { url, method, data } = this.options
 
@@ -69,19 +77,15 @@ class Ajax {
         return fd
     }
 
-    prepare() {
-        let { method, contentType, headers, xhrFields } = this.options;
-        this.xhr.open(method, this.request_url, true);
-        contentType && this.xhr.setRequestHeader('Content-Type', contentType);
-        for (let k in headers) this.xhr.setRequestHeader(k, headers[k]);
-        for (let k in xhrFields) this.xhr[k] = xhrFields[k];
-    }
-
     counting_down = () => {
         // cancel callback if timeout
         setTimeout(() => {
             this.options.onComplete = n => null;
-            this.options.onTimeout()
+
+            if (this.xhr.readyState != 4) {
+                // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+                this.options.onTimeout(['UNSENT', 'OPENED', 'HEADERS_RECEIVED', 'LOADING'][this.xhr.readyState])
+            }
         }, this.options.timeout * 1000)
     }
 
@@ -95,8 +99,9 @@ class Ajax {
                 }
             }
         })
-        this.counting_down();
-        this.xhr.send(this.form_data);
+
+        this.counting_down()
+        this.xhr.send(this.form_data)
         return promise
     }
 }
@@ -135,9 +140,9 @@ class RequestFactory {
             if (options.loading)
                 this.handler.show_loading(options['loading'])
         }
-        options['onTimeout'] = () => {
+        options['onTimeout'] = (readyState) => {
             if (options.timeout)
-                this.handler.timeout_handler(options['timeout'])
+                this.handler.timeout_handler(options['timeout'], readyState)
         }
         options['onComplete'] = (status, responseText, resolve, reject) => {
             if (options.loading) this.handler.hide_loading()

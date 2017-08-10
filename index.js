@@ -28,7 +28,7 @@ let Request = new RequestFactory({
     },
     alert: Components.showAlert,
     capture: captureError,
-    timeout_handler: t => Components.showToast(`接口超时 [${t}s]`),
+    timeout_handler: (timeout, state) => Components.showToast(`接口超时 [${state}:${timeout}s]`),
     show_loading: Components.showLoading,
     hide_loading: Components.hideLoading
 }).ajax
