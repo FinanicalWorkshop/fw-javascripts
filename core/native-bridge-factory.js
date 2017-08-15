@@ -80,6 +80,9 @@ class NativeBridgeFactory {
     _pack_up(action, value, need_login) {
         let encode = !!navigator.userAgent.match(/Android/i);
         value = encode ? encodeURI(value) : value;
+        // hook login action
+        if (action == 'login') need_login = true
+            
         return {
             action: action,
             need_login: !!need_login,
@@ -118,8 +121,27 @@ class NativeBridgeFactory {
             Only has 2 methods:
             1. trigger
             2. toNative
+
+            detail:
+
+            * goto 让app打开一个新的webview加载参数中的url
+            * set_title 设置app中的头部导航标题
+            * hide_header 隐藏app的头部导航
+            * show_header 显示app的头部导航
+            * login 登录
+            * share 分享功能
+            * redirectMall 去豆哥商城 // deprecated
+            * clipboard 复制到剪贴板
+            * close 关闭当前webview
         `)
     }
 }
 
-export default NativeBridgeFactory
+function NativeBridgeExtend() {
+
+}
+
+export {
+    NativeBridgeFactory as default,
+    NativeBridgeExtend
+} 
