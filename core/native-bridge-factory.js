@@ -38,17 +38,20 @@ function initIOS(init_callback) {
 
 class NativeBridgeFactory {
 
-    constructor(activeUserAgent) {
+    constructor(activeUserAgent, debug) {
         this.bridge = null;
         this.isReady = false;
         // 接收来自App消息的回调函数, 同时只能设置一个回调方法
         this._receive_callback = null
         this._depot = [];
+        this.debug = debug === 'debug'
 
         // 先判断 UA 是否符合条件, 不符合条件就不初始化 NativeBridge
-        if (activeUserAgent &&
+        if (!this.debug && activeUserAgent &&
             !navigator.userAgent.match(activeUserAgent))
             return;
+
+        this._extend(NativeBridgeExtend)
 
         initListener(bridge => {
             if (inAndroid()) {
@@ -80,9 +83,10 @@ class NativeBridgeFactory {
     _pack_up(action, value, need_login) {
         let encode = !!navigator.userAgent.match(/Android/i);
         value = encode ? encodeURI(value) : value;
+        
         // hook login action
         if (action == 'login') need_login = true
-            
+
         return {
             action: action,
             need_login: !!need_login,
@@ -91,12 +95,15 @@ class NativeBridgeFactory {
         }
     }
 
-
     _see_off(pack) {
         this.bridge.callHandler('nativeCallback', pack)
     }
 
     send(pack) {
+        if (this.debug) {
+            console && console.warn('NativeBridge should send pack:', pack)
+        }
+
         this.isReady ?
             this._see_off(pack) :
             this._depot.push(pack)
@@ -116,6 +123,14 @@ class NativeBridgeFactory {
         this.send(this._pack_up('toNative', kw))
     }
 
+    _extend(fn) {
+        this.command = {}
+
+        Object.getOwnPropertyNames(fn).sort().forEach(i => {
+            this.command[i] = fn[i].bind(this)
+        })
+    }
+
     get help() {
         console && console.log && console.log(`
             Only has 2 methods:
@@ -133,12 +148,45 @@ class NativeBridgeFactory {
             * redirectMall 去豆哥商城 // deprecated
             * clipboard 复制到剪贴板
             * close 关闭当前webview
+            ...
         `)
     }
 }
 
-function NativeBridgeExtend() {
-
+const NativeBridgeExtend = {
+    goto: function (link, need_login, next_title) {
+        this.trigger('goto', link, need_login)
+    },
+    setTitle: function (title) {
+        this.trigger('set_title', title)
+    },
+    hideHeader: function () {
+        this.trigger('hide_header')
+    },
+    showHeader: function () {
+        this.trigger('show_header')
+    },
+    login: function (next_url) {
+        this.trigger('login', '', true)
+    },
+    share: function (opt) {
+        this.trigger('share', JSON.stringify({
+            title: opt.title, // 标题
+            image: opt.image, // 图标
+            link: opt.link, // 链接
+            desc: opt.desc // 描述
+        }), true)
+    },
+    gotoMall: function () {
+        // deprecated method
+        this.trigger('redirectMall')
+    },
+    clipboard: function (text) {
+        this.trigger('clipboard', text)
+    },
+    close: function () {
+        this.trigger('close')
+    }
 }
 
 export {
