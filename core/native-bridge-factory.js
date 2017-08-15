@@ -149,6 +149,15 @@ class NativeBridgeFactory {
             * clipboard 复制到剪贴板
             * close 关闭当前webview
             ...
+            
+            * to_native app_register 去注册页
+            * invite 邀请好友页
+            * app_coupon 优惠券页
+            * auto_bid_second 绑定银行卡第二步
+            * auto_bid_auth 自动投资页面
+            * app_fanxiCoupon 返息券页面
+            * app_contribute_detail 用户贡献详情页
+            * app_back_native ???
         `)
     }
 }
