@@ -197,6 +197,41 @@ Utils.Cookie 是操作document的cookie的方法
 
 ```
 
+#### Cache
+
+简单的内存缓存
+
+创建实例
+
+```javascript
+    import { Cache } from 'fw-javascripts'
+
+    let cache = new Cache()
+
+```
+
+*set* *get*
+
+set 通过一个key 设置value和有效期
+
+```javascript
+
+    import { Cache } from 'fw-javascript'
+
+    let cache = new Cache()
+
+    cache.set('key', 'value', 10)
+    // => null
+
+    cache.get('key')
+    // => 'value'
+
+    // ... 10s 后
+    cache.get('key')
+    // => null
+
+```
+
 #### NativeBridge
 
 当前网页嵌入到App中, 需要与app通信时, 需要调用这个方法
