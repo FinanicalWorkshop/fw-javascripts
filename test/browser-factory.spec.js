@@ -45,6 +45,7 @@ describe('BrowserFactory', function () {
             assert.equal(false, browser.inIOSApp)
             assert.equal(false, browser.inAndroidApp)
             assert.equal(false, browser.inWeixin)
+            assert.equal(false, browser.inMac)
         })
         it('iPhone6 ua', function () {
             let browser = new BrowserFactory(IPHONE6_UA, JRGC_APP_STAMP)
@@ -56,6 +57,7 @@ describe('BrowserFactory', function () {
             assert.equal(false, browser.inIOSApp)
             assert.equal(false, browser.inAndroidApp)
             assert.equal(false, browser.inWeixin)
+            assert.equal(false, browser.inMac)
         })
         it('jrgc ios app ua', function () {
             let browser = new BrowserFactory(JRGC_IPHONE_UA, JRGC_APP_STAMP)
@@ -67,6 +69,7 @@ describe('BrowserFactory', function () {
             assert.equal(true, browser.inIOSApp)
             assert.equal(false, browser.inAndroidApp)
             assert.equal(false, browser.inWeixin)
+            assert.equal(false, browser.inMac)
         })
         it('jrgc android app ua', function () {
             let browser = new BrowserFactory(JRGC_ANDROID_UA, JRGC_APP_STAMP)
@@ -78,6 +81,7 @@ describe('BrowserFactory', function () {
             assert.equal(false, browser.inIOSApp)
             assert.equal(true, browser.inAndroidApp)
             assert.equal(false, browser.inWeixin)
+            assert.equal(false, browser.inMac)
         })
 
         it('jrgc android app ua', function () {
@@ -90,6 +94,8 @@ describe('BrowserFactory', function () {
             assert.equal(false, browser.inIOSApp)
             assert.equal(false, browser.inAndroidApp)
             assert.equal(true, browser.inWeixin)
+            assert.equal(false, browser.inMac)
         })
+        
     })
 })

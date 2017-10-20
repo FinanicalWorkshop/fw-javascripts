@@ -6,12 +6,12 @@ class BrowserFactory {
     get inApp() {
         return !!this.ua.match(this.app_stamp)
     }
-    
-    get inFXHApp(){
+
+    get inFXHApp() {
         return !!this.ua.match('EasyLoan888')
     }
 
-    get inJRGCApp(){
+    get inJRGCApp() {
         return !!this.ua.match('FinancialWorkshop')
     }
 
@@ -26,6 +26,10 @@ class BrowserFactory {
 
     get inIOS() {
         return /iPhone|iPad|iPod/i.test(this.ua)
+    }
+
+    get inMac() {
+        return /Macintosh/i.test(this.ua)
     }
 
     get inMobile() {
