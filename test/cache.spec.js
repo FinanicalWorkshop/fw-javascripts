@@ -36,4 +36,17 @@ describe('Cache', function () {
         }, 2)
     })
 
+    it('should set a default value with expire time', function () {
+
+        let cache = new Cache(1)
+
+        cache.set('1s', 1)
+
+        assert.strictEqual(cache.get('1s'), 1)
+
+        setTimeout(() => {
+            assert.strictEqual(cache.get('1s'), null)
+        }, 2)
+    })
+
 })

@@ -1,3 +1,6 @@
+
+import Cache from './cache.js'
+
 class Ajax {
 
     constructor(options) {
@@ -117,6 +120,8 @@ class RequestFactory {
             timeout: 10, // seconds before timeout, 0 means do nothing
         }
 
+        this.cache = new Cache()
+
         let noop = n => null;
 
         this.handler = Object.assign({
@@ -129,7 +134,16 @@ class RequestFactory {
         }, handler)
     }
 
-    ajax = options => {
+    get_set_cache = (options, v, cache_seconds) => {
+
+        let k = options.method.toUpperCase() + ':' + options.url + ':' + options.data
+
+        if (v) this.cache.set(k, v, cache_seconds)
+
+        return this.cache.get(k)
+    }
+
+    ajax = (options, cache_seconds = 0) => {
         // 快捷写法, 如果传入参数只有一个字符串,
         // 那么就默认使用 GET 请求这个字符串表示的地址
         if (typeof (options) == 'string')
@@ -144,8 +158,15 @@ class RequestFactory {
             if (options.timeout)
                 this.handler.timeout_handler(options['timeout'], readyState)
         }
+
         options['onComplete'] = (status, responseText, resolve, reject) => {
             if (options.loading) this.handler.hide_loading()
+
+            // feature, try cache data
+            this.get_set_cache(options, {
+                status: status,
+                responseText: responseText
+            }, cache_seconds)
 
             if (status == 200 || status == 201) {
                 var r = JSON.parse(responseText);
@@ -176,10 +197,19 @@ class RequestFactory {
             }
         }
 
+        let cached_data = this.get_set_cache(options)
+
+        if (cached_data) {
+            let { status, responseText } = cached_data
+            return new Promise((resolve, reject) => {
+                options['onComplete'](status, responseText, resolve, reject)
+            })
+        }
+
         return (new Ajax(options)).emit()
+
     }
 }
-
 
 export {
     RequestFactory as default

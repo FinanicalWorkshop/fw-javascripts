@@ -1,5 +1,6 @@
 export default class Cache {
-    constructor() {
+    constructor(default_seconds = null) {
+        this.default_seconds = default_seconds
         this.data = {}
     }
 
@@ -16,6 +17,9 @@ export default class Cache {
     }
 
     set = (k, v, seconds = Infinity) => {
+        if (this.default_seconds && seconds === Infinity)
+            seconds = this.default_seconds
+
         this.data[this._string_key(k)] = {
             value: v,
             expired_at: (new Date()).getTime() + (seconds * 1000)
