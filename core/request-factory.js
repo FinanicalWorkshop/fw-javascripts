@@ -167,10 +167,11 @@ class RequestFactory {
             if (options.loading) this.handler.hide_loading()
 
             // feature, try cache data
-            this.get_set_cache(options, {
-                status: status,
-                responseText: responseText
-            }, cache_seconds)
+            if (cache_seconds)
+                this.get_set_cache(options, {
+                    status: status,
+                    responseText: responseText
+                }, cache_seconds)
 
             if (status == 200 || status == 201) {
                 var r = JSON.parse(responseText);
