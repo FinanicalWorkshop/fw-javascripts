@@ -143,11 +143,15 @@ class RequestFactory {
         return this.cache.get(k)
     }
 
-    ajax = (options, cache_seconds = 0) => {
+    ajax = options => {
         // 快捷写法, 如果传入参数只有一个字符串,
         // 那么就默认使用 GET 请求这个字符串表示的地址
         if (typeof (options) == 'string')
             options = { url: options };
+
+        // 获取缓存时间, 并把这个参数从options中移除
+        let cache_seconds = options.cache === true ? Infinity : options.cache
+        delete options.cache
 
         options = Object.assign({}, this.default_options, options)
         options['onStart'] = () => {
