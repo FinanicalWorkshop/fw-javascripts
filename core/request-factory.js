@@ -136,7 +136,7 @@ class RequestFactory {
 
     get_set_cache = (options, v, cache_seconds) => {
 
-        let k = options.method.toUpperCase() + ':' + options.url + ':' + options.data
+        let k = options.method.toUpperCase() + ':' + options.url + ':' + JSON.stringify(options.data)
 
         if (v) this.cache.set(k, v, cache_seconds)
 
