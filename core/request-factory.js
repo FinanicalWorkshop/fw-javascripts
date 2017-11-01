@@ -202,7 +202,7 @@ class RequestFactory {
             }
         }
 
-        let cached_data = this.get_set_cache(options)
+        let cached_data = cache_seconds && this.get_set_cache(options)
 
         if (cached_data) {
             let { status, responseText } = cached_data
