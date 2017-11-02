@@ -57,7 +57,6 @@ class Ajax {
         return flat_data.join('&')
     }
 
-
     get form_data() {
         let { method, data, contentType } = this.options
 
@@ -135,11 +134,12 @@ class RequestFactory {
     }
 
     get_set_cache = (options, v, cache_seconds) => {
+        let m = options.method.toUpperCase()
+        if (m !== 'GET') return // 不是GET请求不能缓存
 
-        let k = options.method.toUpperCase() + ':' + options.url + ':' + JSON.stringify(options.data)
+        let k = m + ':' + options.url + ':' + JSON.stringify(options.data)
 
         if (v) this.cache.set(k, v, cache_seconds)
-
         return this.cache.get(k)
     }
 

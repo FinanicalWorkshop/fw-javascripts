@@ -68,6 +68,8 @@ class NativeBridgeFactory {
             })
 
             this.setup(bridge)
+            // for debug
+            window.__NATIVE_BRIDGE__ = this;
         })
     }
 
