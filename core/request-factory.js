@@ -145,7 +145,7 @@ class RequestFactory {
                 this.handler.timeout_handler(options['timeout'], readyState)
         }
 
-        options['onComplete'] = (status, responseText, resolve, reject) => {
+        let onCompleteHandler = (status, responseText, resolve, reject) => {
             if (options.loading) this.handler.hide_loading()
 
             if (status == 200 || status == 201) {
@@ -176,6 +176,8 @@ class RequestFactory {
                 this.handler.capture(e);
             }
         }
+
+        options['onComplete'] = options['onComplete'] || onCompleteHandler
 
         return (new Ajax(options)).emit()
 
