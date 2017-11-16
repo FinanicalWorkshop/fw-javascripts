@@ -135,6 +135,18 @@ class RequestFactory {
         if (typeof (options) == 'string')
             options = { url: options };
 
+        let isOK = r => r.code == 10000;
+        let leach = r => r.data
+
+        if (options.isOK) {
+            isOK = isOK;
+            delete options.isOK
+        }
+        if (options.leach) {
+            leach = leach;
+            delete options.leach
+        }
+
         options = Object.assign({}, this.default_options, options)
         options['onStart'] = () => {
             if (options.loading)
@@ -145,13 +157,13 @@ class RequestFactory {
                 this.handler.timeout_handler(options['timeout'], readyState)
         }
 
-        let onCompleteHandler = (status, responseText, resolve, reject) => {
+        options['onComplete'] = (status, responseText, resolve, reject) => {
             if (options.loading) this.handler.hide_loading()
 
             if (status == 200 || status == 201) {
                 var r = JSON.parse(responseText);
-                if (r.code == 10000) {
-                    resolve(r.data);
+                if (isOK(r)) {
+                    resolve(leach(r));
                 } else {
                     if (!options.silence)
                         this.handler.error_handler(r.code, r.message, responseText);
@@ -160,7 +172,7 @@ class RequestFactory {
             } else if (status == 404) {
                 this.handler.alert('API不存在，请确认接口地址正确')
             } else if (status >= 500) {
-                //if (status == 0) FW.Component.Alert('cross domain deny, check server config: Access-Control-Allow-Origin');
+                //if (status == 0) ('cross domain deny, check server config: Access-Control-Allow-Origin');
                 this.handler.alert(`服务器开小差了~ 请稍后再试${status}`);
             } else {
                 if (status !== 0)
@@ -176,8 +188,6 @@ class RequestFactory {
                 this.handler.capture(e);
             }
         }
-
-        options['onComplete'] = options['onComplete'] || onCompleteHandler
 
         return (new Ajax(options)).emit()
 
