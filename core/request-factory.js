@@ -139,11 +139,11 @@ class RequestFactory {
         let leach = r => r.data
 
         if (options.isOK) {
-            isOK = isOK;
+            isOK = options.isOK;
             delete options.isOK
         }
         if (options.leach) {
-            leach = leach;
+            leach = options.leach;
             delete options.leach
         }
 
