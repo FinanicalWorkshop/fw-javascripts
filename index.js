@@ -34,7 +34,15 @@ let Request = new RequestFactory({
     hide_loading: Components.hideLoading
 }).ajax
 
+let JSONP = function (url, params) {
+    return getJSONP(url, params).catch(e => {
+        Components.showToast(e.message || 'JSONP Error')
+        return Promise.reject(e)
+    })
+}
+
 let Version = { version: '0.1.10' }
+
 let DOMReady = DOMReadyMethodFactory(window, document)
 
 export {
@@ -44,7 +52,8 @@ export {
     , DOMReady
     , Event
     , Utils
-    , getJSONP
+    , getJSONP // this method is deprecated, use JSONP instead
+    , JSONP
     , RequestFactory
     , Request
     , Components

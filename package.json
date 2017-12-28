@@ -1,7 +1,7 @@
 {
   "name": "fw-javascripts",
   "description": "used for Company project, private purpose",
-  "version": "0.9.1",
+  "version": "0.10.0",
   "author": "delong",
   "engines": {
     "node": ">=8"
@@ -23,8 +23,7 @@
   },
   "keywords": [
     "金融工场",
-    "financial",
-    "workshop"
+    "financial workshop"
   ],
   "license": "BSD",
   "scripts": {

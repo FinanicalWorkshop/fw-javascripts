@@ -36,10 +36,9 @@ const getJSONP = function (url, params) {
 
     return new Promise(function (resolve, reject) {
         let timer = setTimeout(function () {
-            let err = new Error('JSONP request timeout');
             cleanup();
-            reject(err);
-        }, 3500);
+            reject(new Error('JSONP Timeout'));
+        }, 5000);
 
         function cleanup() {
             if (script.parentNode) script.parentNode.removeChild(script);
@@ -48,6 +47,11 @@ const getJSONP = function (url, params) {
                 delete window[id];
             }
         }
+
+        script.addEventListener('error', function (e) {
+            cleanup()
+            reject(e)
+        })
 
         window[id] = function (data) {
             cleanup();
