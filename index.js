@@ -5,7 +5,7 @@ import Utils from './core/utils.js'
 import Cache from './core/cache.js'
 import getJSONP from './core/jsonp.js'
 import * as Components from 'fw-components'
-import { captureError } from './core/capture.js'
+import {captureError} from './core/capture.js'
 
 import BrowserFactory from './core/browser-factory.js'
 import RequestFactory from './core/request-factory.js'
@@ -41,7 +41,45 @@ let JSONP = function (url, params) {
     })
 }
 
-let Version = { version: '0.1.10' }
+let Polling = function (opt) {
+    let PostClass = function (opt) {
+        this.opt = Object.assign({
+            maxTimes: 3,
+            interval: 3000,
+            condition: () => true,
+            request: Request.ajax
+        }, opt)
+    }
+
+    PostClass.prototype = {
+        ajax: function (url, data, options) {
+            let count = 0;
+            options = Object.assign({url, data}, options, {silence: true, loading: true})
+
+            return new Promise((resolve, reject) => {
+                let anonymous = () => {
+                    if (count++ > this.opt.maxTimes) {
+                        Components.hideLoading()
+                        reject()
+                    } else {
+                        Components.showLoading('', false)
+                        this.opt.request(options).then(data => {
+                            this.opt.condition(data) ?
+                                resolve(data) :
+                                setTimeout(anonymous, this.opt.interval)
+                        })
+                    }
+                }
+
+                anonymous()
+            })
+        }
+    }
+
+    return new PostClass(opt)
+}
+
+let Version = {version: '0.11.0'}
 
 let DOMReady = DOMReadyMethodFactory(window, document)
 
@@ -52,6 +90,7 @@ export {
     , DOMReady
     , Event
     , Utils
+    , Cache
     , getJSONP // this method is deprecated, use JSONP instead
     , JSONP
     , RequestFactory

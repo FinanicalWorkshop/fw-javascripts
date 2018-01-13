@@ -83,4 +83,13 @@ export default class Utils {
         });
         return r;
     }
+
+    loadScript = function (src) {
+        let script = document.createElement('script')
+        script.src = src
+        return new Promise((resolve, _) => {
+            document.head.appendChild(script)
+            script.onload(() => resolve(script))
+        })
+    }
 }
