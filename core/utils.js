@@ -3,7 +3,7 @@ function cookie() {
     if (c === '') return r
     c.split(';').forEach((kv) => {
         let t = kv.trim().split('=');
-        if(t) r[t[0]] = t[1];
+        if(t[1]) r[t[0]] = t[1];
     });
     return r;
 }
