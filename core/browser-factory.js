@@ -7,6 +7,10 @@ class BrowserFactory {
         return !!this.ua.match(this.app_stamp)
     }
 
+    get inRetailApp(){
+        return !!this.ua.match('InclusiveRetail')
+    }
+
     get inFXHApp() {
         return !!this.ua.match('EasyLoan888')
     }
