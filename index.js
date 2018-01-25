@@ -5,7 +5,7 @@ import Utils from './core/utils.js'
 import Cache from './core/cache.js'
 import getJSONP from './core/jsonp.js'
 import * as Components from 'fw-components'
-import {captureError} from './core/capture.js'
+import { captureError } from './core/capture.js'
 
 import BrowserFactory from './core/browser-factory.js'
 import RequestFactory from './core/request-factory.js'
@@ -54,7 +54,7 @@ let Polling = function (opt) {
     PostClass.prototype = {
         ajax: function (url, data, options) {
             let count = 0;
-            options = Object.assign({url, data}, options, {silence: true, loading: true})
+            options = Object.assign({ url, data }, options, { silence: true, loading: true })
 
             return new Promise((resolve, reject) => {
                 let anonymous = () => {
@@ -79,14 +79,17 @@ let Polling = function (opt) {
     return new PostClass(opt)
 }
 
-let Version = {version: '0.11.0'}
+let Version = { version: '0.11.4' }
 
 let DOMReady = DOMReadyMethodFactory(window, document)
+
+let Browser = new BrowserFactory()
 
 export {
     Version as default
     , NativeBridgeFactory
     , BrowserFactory
+    , Browser
     , DOMReady
     , Event
     , Utils
