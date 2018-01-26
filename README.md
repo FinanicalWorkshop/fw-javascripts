@@ -137,6 +137,25 @@ for test this lib, run
     Browser.inWeixin // 
 ```
 
+#### Browser
+
+`BrowserFactory` 简化版, 在实际使用中, 因为 BrowserFacotry 需要初始化, 容易出错(其实是, 经常出错)
+
+所以直接 export 出对象
+
+```javascript
+    import { Browser } from 'fw-javascripts'
+
+    Browser.inApp
+    Browser.appVersion
+    Browser.inAndroid 
+    Browser.inIOS
+    Browser.inMobile
+
+    // ...
+
+```
+
 #### getJSONP
 
 ```javascript
