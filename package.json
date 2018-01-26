@@ -1,0 +1,32 @@
+{
+  "name": "fw-javascripts",
+  "description": "used for Company project, private purpose",
+  "version": "0.11.4",
+  "author": "delong",
+  "engines": {
+    "node": ">=8"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/FinanicalWorkshop/fw-javascripts"
+  },
+  "dependencies": {
+    "fw-components": "*"
+  },
+  "devDependencies": {
+    "babel-preset-es2015-node": "^6.1.1",
+    "babel-cli": "^6.26.0",
+    "babel-preset-react": "6.24.1",
+    "babel-preset-stage-2": "6.24.1",
+    "babel-register": "^6.26.0",
+    "mocha": "^4.0.1"
+  },
+  "keywords": [
+    "金融工场",
+    "financial workshop"
+  ],
+  "license": "BSD",
+  "scripts": {
+    "test": "node node_modules/mocha/bin/mocha --require babel-register --reporter=nyan"
+  }
+}

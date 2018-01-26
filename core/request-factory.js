@@ -1,10 +1,18 @@
+
 class Ajax {
+
     constructor(options) {
         let default_options = {
             url: '',
             method: 'GET',
             data: {},
-            withCredentials: false,
+            contentType: 'application/x-www-form-urlencoded; charset=UTF-8',
+            headers: {
+                'Accept': 'application/json'
+            },
+            xhrFields: {
+                // example  { withCredentials: true }
+            },
             timeout: 10,
             onStart: n => null,
             onTimeout: n => null,
@@ -12,50 +20,72 @@ class Ajax {
         }
 
         this.options = Object.assign(default_options, options)
+        this.options.method = this.options.method.toUpperCase()
+
         this.xhr = new XMLHttpRequest()
         this.prepare()
     }
-    get request_url() {
-        let url = this.options.url, form_data = this.form_data;
-        if (this.options.method.toUpperCase() == 'GET' && form_data) {
-            let chr = url.indexOf('?') > 0 ? '&' : '?'
-            url += `${chr}${form_data}`
-        }
-        return url
-    }
-    get form_data() {
-        let form_data = '', opt = this.options;
-        // 伪装成 PUT or DELETE 方法
-        if (opt.method.toUpperCase() === 'PUT')
-            opt.data['_method'] = 'put';
-        if (opt.method.toUpperCase() == 'DELETE')
-            opt.data['_method'] = 'delete';
-        if (typeof (opt.data) == 'object') {
-            for (let k in opt.data) {
-                let v = opt.data[k]
-                if (v !== undefined && v !== null)
-                    form_data += `${form_data.length ? '' : '&'}${k}=${v}`
-            }
-        } else {
-            form_data = opt.data;
-        }
-        return form_data
-    }
 
     prepare() {
-        let opt = this.options,
-            method = opt.method.toUpperCase() == 'GET' ? 'GET' : 'POST';
-        this.xhr.open(method, this.request_url, true);
-        this.xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded; charset=UTF-8');
-        this.xhr.setRequestHeader('Accept', 'application/json');
-        this.xhr.withCredentials = !!opt.withCredentials;
+        let { method, contentType, headers, xhrFields } = this.options;
+        this.xhr.open(method, this.request_url, true)
+        contentType && this.xhr.setRequestHeader('Content-Type', contentType)
+        for (let k in headers) this.xhr.setRequestHeader(k, headers[k]);
+        for (let k in xhrFields) this.xhr[k] = xhrFields[k];
+    }
+
+    get request_url() {
+        let { url, method, data } = this.options
+
+        if (method == 'GET') {
+            let chr = url.indexOf('?') > 0 ? '&' : '?',
+                d = this.serialize_options_data;
+            if (d) url += chr + d
+        }
+
+        return url
+    }
+
+    get serialize_options_data() {
+        let { data } = this.options, flat_data = []
+        for (let k in data) {
+            let v = data[k]
+            if (v !== undefined && v !== null) flat_data.push(`${k}=${v}`)
+        }
+        return flat_data.join('&')
+    }
+
+    get form_data() {
+        let { method, data, contentType } = this.options
+
+        // GET 请求就不用发送消息体了
+        if (method === 'GET') return ''
+
+        // 普通的数据提交, 还得拼接字符串, 不然会默认变成 www/form-data
+        if (contentType === 'application/x-www-form-urlencoded; charset=UTF-8')
+            return this.serialize_options_data.replace(/%20/g, "+")
+
+        let fd = new FormData()
+        if (method === 'PUT') fd.append('_method', 'PUT')
+        if (method === 'DELETE') fd.append('_method', 'DELETE')
+        for (let k in data) {
+            let v = data[k]
+            if (v !== undefined && v !== null)
+                fd.append(k, v)
+        }
+
+        return fd
     }
 
     counting_down = () => {
         // cancel callback if timeout
         setTimeout(() => {
             this.options.onComplete = n => null;
-            this.options.onTimeout()
+
+            if (this.xhr.readyState != 4) {
+                // https://developer.mozilla.org/en-US/docs/Web/API/XMLHttpRequest/readyState
+                this.options.onTimeout(['UNSENT', 'OPENED', 'HEADERS_RECEIVED', 'LOADING'][this.xhr.readyState])
+            }
         }, this.options.timeout * 1000)
     }
 
@@ -69,8 +99,9 @@ class Ajax {
                 }
             }
         })
-        this.counting_down();
-        this.xhr.send(this.form_data);
+
+        this.counting_down()
+        this.xhr.send(this.form_data)
         return promise
     }
 }
@@ -82,20 +113,19 @@ class RequestFactory {
             url: '',
             data: {},
             loading: 'mini',
-            slience: false,
+            silence: false,
             timeout: 10, // seconds before timeout, 0 means do nothing
-            withCredentials: false
         }
 
-        let nil = n => null;
+        let noop = n => null;
 
         this.handler = Object.assign({
-            error_handler: nil,
-            timeout_handler: nil,
-            alert: nil,
-            capture: nil,
-            show_loading: nil,
-            hide_loading: nil
+            error_handler: noop,
+            timeout_handler: noop,
+            alert: noop,
+            capture: noop,
+            show_loading: noop,
+            hide_loading: noop
         }, handler)
     }
 
@@ -105,29 +135,44 @@ class RequestFactory {
         if (typeof (options) == 'string')
             options = { url: options };
 
+        let isOK = r => r.code == 10000;
+        let leach = r => r.data
+
+        if (options.isOK) {
+            isOK = options.isOK;
+            delete options.isOK
+        }
+        if (options.leach) {
+            leach = options.leach;
+            delete options.leach
+        }
+
         options = Object.assign({}, this.default_options, options)
         options['onStart'] = () => {
-            if (options.loading && options.show_loading)
+            if (options.loading)
                 this.handler.show_loading(options['loading'])
         }
-        options['onTimeout'] = () => {
+        options['onTimeout'] = (readyState) => {
             if (options.timeout)
-                this.handler.timeout_handler(options['timeout'])
+                this.handler.timeout_handler(options['timeout'], readyState)
         }
+
         options['onComplete'] = (status, responseText, resolve, reject) => {
+            if (options.loading) this.handler.hide_loading()
+
             if (status == 200 || status == 201) {
                 var r = JSON.parse(responseText);
-                if (r.code == 10000) {
-                    resolve(r.data);
+                if (isOK(r)) {
+                    resolve(leach(r));
                 } else {
-                    if (!options.slience)
+                    if (!options.silence)
                         this.handler.error_handler(r.code, r.message, responseText);
                     reject(r)
                 }
             } else if (status == 404) {
                 this.handler.alert('API不存在，请确认接口地址正确')
             } else if (status >= 500) {
-                //if (status == 0) FW.Component.Alert('cross domain deny, check server config: Access-Control-Allow-Origin');
+                //if (status == 0) ('cross domain deny, check server config: Access-Control-Allow-Origin');
                 this.handler.alert(`服务器开小差了~ 请稍后再试${status}`);
             } else {
                 if (status !== 0)
@@ -145,9 +190,9 @@ class RequestFactory {
         }
 
         return (new Ajax(options)).emit()
+
     }
 }
-
 
 export {
     RequestFactory as default
