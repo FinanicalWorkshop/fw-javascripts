@@ -7,6 +7,7 @@ class BrowserFactory {
             if (this.inFXHApp) app_stamp = 'EasyLoan888';
             if (this.inJRGCApp) app_stamp = 'FinancialWorkshop';
             if (this.inXJDSApp) app_stamp = 'FinancialCash';
+            if (this.inWXXDApp) app_stamp = 'Wangxinxiaodai';
         }
 
         this.app_stamp = app_stamp || 'not in any apps'
@@ -21,6 +22,10 @@ class BrowserFactory {
 
     get inFXHApp() {
         return !!this.ua.match('EasyLoan888')
+    }
+
+    get inWXXDApp() {
+        return !!this.ua.match('Wangxinxiaodai')
     }
 
     get inJRGCApp() {

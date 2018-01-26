@@ -5,17 +5,16 @@ npm-debug.log*
 build
 dist
 cdn
+package-lock.json
 
 workspace.xml
 .idea
 .vscode
-*.iml
 Thumbs.db
 debug.log
 
 !build/.git
 .project
-gulpfile.settings.js
 
 *.rej
 *.swp
@@ -23,4 +22,3 @@ gulpfile.settings.js
 *.diff
 tmp.*
 *.compile.sh
-bundle.min.js
