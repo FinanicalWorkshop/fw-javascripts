@@ -1,5 +1,26 @@
 
 node_modules
+npm-debug.log
 npm-debug.log*
-package-lock.json
+build
+dist
+cdn
+
+workspace.xml
 .idea
+.vscode
+*.iml
+Thumbs.db
+debug.log
+
+!build/.git
+.project
+gulpfile.settings.js
+
+*.rej
+*.swp
+*.swo
+*.diff
+tmp.*
+*.compile.sh
+bundle.min.js
