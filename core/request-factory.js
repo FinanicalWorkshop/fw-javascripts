@@ -114,7 +114,7 @@ class RequestFactory {
             data: {},
             loading: 'mini',
             silence: false,
-            timeout: 10, // seconds before timeout, 0 means do nothing
+            timeout: 10 // seconds before timeout, 0 means do nothing
         }
 
         let noop = n => null;
