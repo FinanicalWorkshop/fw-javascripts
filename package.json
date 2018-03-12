@@ -1,7 +1,7 @@
 {
   "name": "fw-javascripts",
   "description": "common utils",
-  "version": "0.11.6",
+  "version": "1.0.0",
   "author": "deron",
   "engines": {
     "node": ">=8"
@@ -11,7 +11,7 @@
     "url": "https://github.com/FinanicalWorkshop/fw-javascripts"
   },
   "dependencies": {
-    "fw-components": "*"
+    "fw-components": ">=1.0"
   },
   "devDependencies": {
     "babel-preset-es2015-node": "^6.1.1",
